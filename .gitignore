@@ -1,0 +1,39 @@
+target/
+*/target/
+!.mvn/wrapper/maven-wrapper.jar
+web/src/main/resources/rebel.xml
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+idunivers-semester-core/target/**
+idunivers-semester-repository/target/**
+**/.classpath
+**/target/**
+*/**/target/**
+*/target/classes
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+DEPLOY
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+/build/
+.vs/
+.vscode/
+doc/
+**/module_toplist-aggr-stub.xml
+**/module_toplist-aggr-service.xml
+**/module_toplist-aggr-facade.xml
+**/module_toplist-aggr-common.xml
