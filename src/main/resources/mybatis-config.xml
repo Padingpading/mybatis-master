@@ -1,67 +1,74 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE configuration
-        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-    <!--加载到XPathParser.Properties属性-->
-    <properties resource="db.properties" ></properties>
-    <settings>
-        <setting name="logImpl" value="STDOUT_LOGGING"/>
-        <setting name="mapUnderscoreToCamelCase" value="true"/>
-    </settings>
-    <typeAliases>
-        <package name="com.mashibing.bean"/>
-    </typeAliases>
-<!--  <plugins>-->
-<!--    <plugin interceptor="com.github.pagehelper.PageHelper">-->
-<!--      <property name="dialect" value="mysql"/>-->
-<!--    </plugin>-->
-<!--  </plugins>-->
-    <environments default="development">
-        <environment id="development">
-            <transactionManager type="JDBC"/>
-            <dataSource type="POOLED">
-                <property name="driver" value="${driver}"/>
-                <property name="url" value="${url}"/>
-                <property name="username" value="${username}"/>
-                <property name="password" value="${password}"/>
-            </dataSource>
-        </environment>
-    </environments>
-    <databaseIdProvider type="DB_VENDOR">
-        <property name="MySQL" value="mysql"/>
-        <property name="SQL Server" value="sqlserver"/>
-        <property name="Oracle" value="oracle"/>
-    </databaseIdProvider>
-    <!--是来将mapper映射文件引入到配置文件中，方便程序启动的时候进行加载
-    每次在进行填写的时候需要注意，写完xml映射之后一定要添加到mybatis-config文件中
+  <!--加载到XPathParser.Properties属性-->
+  <properties resource="db.properties"></properties>
 
-    resource:从项目的类路径下加载对应的映射文件
-    url:从本地磁盘目录或者网络中引入映射文件
-    class:可以直接引入类的完全限定名，可以使用注解的方式进行使用,
-            如果不想以注解的方式引入呢？
-                如果想要class的方式引入配置文件，可以将xml文件添加到具体的类的同级目录下
-              1、      如果是maven的项目的话，需要添加如下配置，因为maven默认只会编译java文件，需要把xml文件也添加到指定目录中
-                    <build>
-                        <resources>
-                            <resource>
-                                <directory>src/main/java</directory>
-                                <includes>
-                                    <include>**/*.xml</include>
-                                </includes>
-                            </resource>
-                        </resources>
-                    </build>
-              2、在resource资源目录下，创建跟dao层一样的同级目录即可，将配置文件放到指定的目录
+  <!--Configuration中的属性值-->
+  <settings>
+    <setting name="logImpl" value="STDOUT_LOGGING"/>
+    <setting name="mapUnderscoreToCamelCase" value="true"/>
+  </settings>
+
+  <!--类型别名 用别名替代 java中的类型-->
+  <typeAliases>
+    <!--包扫描-->
+  <!--  <package name="com.mashibing.bean"/>-->
+    <!--自定义-->
+    <typeAlias alias="testEmp" type="com.mashibing.c_alias.Emp"/>
+  </typeAliases>
+  <!--  <plugins>-->
+  <!--    <plugin interceptor="com.github.pagehelper.PageHelper">-->
+  <!--      <property name="dialect" value="mysql"/>-->
+  <!--    </plugin>-->
+  <!--  </plugins>-->
+  <environments default="development">
+    <environment id="development">
+      <transactionManager type="JDBC"/>
+      <dataSource type="POOLED">
+        <property name="driver" value="${driver}"/>
+        <property name="url" value="${url}"/>
+        <property name="username" value="${username}"/>
+        <property name="password" value="${password}"/>
+      </dataSource>
+    </environment>
+  </environments>
+  <databaseIdProvider type="DB_VENDOR">
+    <property name="MySQL" value="mysql"/>
+    <property name="SQL Server" value="sqlserver"/>
+    <property name="Oracle" value="oracle"/>
+  </databaseIdProvider>
+  <!--是来将mapper映射文件引入到配置文件中，方便程序启动的时候进行加载
+  每次在进行填写的时候需要注意，写完xml映射之后一定要添加到mybatis-config文件中
+
+  resource:从项目的类路径下加载对应的映射文件
+  url:从本地磁盘目录或者网络中引入映射文件
+  class:可以直接引入类的完全限定名，可以使用注解的方式进行使用,
+          如果不想以注解的方式引入呢？
+              如果想要class的方式引入配置文件，可以将xml文件添加到具体的类的同级目录下
+            1、      如果是maven的项目的话，需要添加如下配置，因为maven默认只会编译java文件，需要把xml文件也添加到指定目录中
+                  <build>
+                      <resources>
+                          <resource>
+                              <directory>src/main/java</directory>
+                              <includes>
+                                  <include>**/*.xml</include>
+                              </includes>
+                          </resource>
+                      </resources>
+                  </build>
+            2、在resource资源目录下，创建跟dao层一样的同级目录即可，将配置文件放到指定的目录
+  -->
+  <mappers>
+    <!--        <mapper resource="EmpDao.xml" />-->
+    <!--        <mapper resource="UserDao.xml"/>-->
+    <!--        <mapper class="com.mashibing.dao.UserDaoAnnotation"></mapper>-->
+    <!--        <mapper class="com.mashibing.dao.UserDao"></mapper>-->
+    <!--如果需要引入多个配置文件，可以直接定义包的名称
+    resource目录下配置的映射文件必须要具体相同的目录
     -->
-    <mappers>
-<!--        <mapper resource="EmpDao.xml" />-->
-<!--        <mapper resource="UserDao.xml"/>-->
-<!--        <mapper class="com.mashibing.dao.UserDaoAnnotation"></mapper>-->
-<!--        <mapper class="com.mashibing.dao.UserDao"></mapper>-->
-        <!--如果需要引入多个配置文件，可以直接定义包的名称
-        resource目录下配置的映射文件必须要具体相同的目录
-        -->
-        <package name="com.mashibing.dao"/>
-    </mappers>
+    <package name="com.mashibing.dao"/>
+  </mappers>
 </configuration>
