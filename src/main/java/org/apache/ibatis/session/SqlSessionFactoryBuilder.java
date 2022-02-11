@@ -49,7 +49,7 @@ public class SqlSessionFactoryBuilder {
 
   //第4种方法是最常用的，它使用了一个参照了XML文档或更特定的SqlMapConfig.xml文件的Reader实例。
   //可选的参数是environment和properties。Environment决定加载哪种环境(开发环境/生产环境)，包括数据源和事务管理器。
-  //如果使用properties，那么就会加载那些properties（属性配置文件），那些属性可以用${propName}语法形式多次用在配置文件中。和Spring很像，一个思想？
+  //如果使用properties，那么性就会加载那些properties（属配置文件），那些属性可以用${propName}语法形式多次用在配置文件中。和Spring很像，一个思想？
   public SqlSessionFactory build(Reader reader, String environment, Properties properties) {
     try {
       // 读取配置文件

@@ -339,6 +339,7 @@ public class Reflector {
 
   private void addUniqueMethods(Map<String, Method> uniqueMethods, Method[] methods) {
     for (Method currentMethod : methods) {
+      //桥接方法,引入泛型后的兼容
       if (!currentMethod.isBridge()) {
         // 通过Reflector.getSignature方法得到的方法签名是：返回值类型#方法名称：参数类型列表
         String signature = getSignature(currentMethod);

@@ -68,7 +68,6 @@ public class PooledDataSource implements DataSource {
   protected boolean poolPingEnabled;
   // 当连接超过poolPingConnectionsNotUsedFor毫秒未使用时，会发送一次测试SQL语句，检测连接是否正常
   protected int poolPingConnectionsNotUsedFor;
-
   // 根据数据库URL、用户名和密码生成一个hash值，该hash值用于标志着当前的连接池，在构造函数中初始化
   private int expectedConnectionTypeCode;
 
