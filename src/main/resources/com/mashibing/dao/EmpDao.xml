@@ -3,7 +3,22 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mashibing.dao.EmpDao">
-  <select id="findEmpByEmpno" resultType="com.mashibing.bean.Emp" useCache="">
+  <!--
+    eviction: 缓存回收策略，有这几种回收策略
+      LRU - 最近最少回收，移除最长时间不被使用的对象  默认
+      FIFO - 先进先出，按照缓存进入的顺序来移除它们
+      SOFT - 软引用，移除基于垃圾回收器状态和软引用规则的对象
+      WEAK - 弱引用，更积极的移除基于垃圾收集器和弱引用规则的对象
+    flushinterval 缓存刷新间隔，缓存多长时间刷新一次，默认不清空，设置一个毫秒值
+    readOnly: 是否只读；true 只读，MyBatis 认为所有从缓存中获取数据的操作都是只读操作，不会修改数据。MyBatis 为了加快获取数据，直接就会将数据在缓存中的引用交给用户。不安全，速度快。读写(默认)：MyBatis 觉得数据可能会被修改
+    size : 缓存存放多少个元素
+    type: 指定自定义缓存的全类名(实现Cache 接口即可)
+    blocking： 若缓存中找不到对应的key，是否会一直blocking，直到有对应的数据进入缓存。
+   -->
+
+  <cache eviction="FIFO" flushinterval="60000" size="512" readOnly="true"/>
+
+  <select id="findEmpByEmpno" resultType="com.mashibing.bean.Emp" >
         select * from emp where empno = #{empno}
   </select>
   <select id="findEmpByEmpnoAndEname" resultType="com.mashibing.bean.Emp">
