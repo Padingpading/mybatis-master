@@ -320,6 +320,8 @@ public class XMLMapperBuilder extends BaseBuilder {
   }
 
   // 配置resultMap
+  //1、解析resultMap节点
+  //2、
   private ResultMap resultMapElement(XNode resultMapNode, List<ResultMapping> additionalResultMappings, Class<?> enclosingType) {
     // 错误上下文
     ErrorContext.instance().activity("processing " + resultMapNode.getValueBasedIdentifier());

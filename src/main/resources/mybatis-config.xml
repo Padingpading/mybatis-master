@@ -49,11 +49,11 @@
   </environments>
 
   <!--数据库厂商标识-->
-  <databaseIdProvider type="DB_VENDOR">
-    <property name="MySQL" value="mysql"/>
-    <property name="SQL Server" value="sqlserver"/>
-    <property name="Oracle" value="oracle"/>
-  </databaseIdProvider>
+<!--  <databaseIdProvider type="DB_VENDOR">-->
+<!--    <property name="MySQL" value="mysql"/>-->
+<!--    <property name="SQL Server" value="sqlserver"/>-->
+<!--    <property name="Oracle" value="oracle"/>-->
+<!--  </databaseIdProvider>-->
 
 <!--  <typeHandlers>-->
 <!--    <package name="org.mybatis.example"/>-->

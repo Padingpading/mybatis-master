@@ -117,6 +117,7 @@ public class MapperAnnotationBuilder {
     // 检测是否已经加载过该接口
     if (!configuration.isResourceLoaded(resource)) {
       // 检测是否加载过对应的映射配置文件，如果未加载，则创建XMLMapperBuilder对象解析对应的映射文件
+      //映射的语句,存在Map里configuration.Map<String, MappedStatement> mappedStatements
       loadXmlResource();
       configuration.addLoadedResource(resource);
       assistant.setCurrentNamespace(type.getName());

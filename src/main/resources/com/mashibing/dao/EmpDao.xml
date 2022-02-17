@@ -3,6 +3,22 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mashibing.dao.EmpDao">
+
+  <!--resultMap解析-->
+  <resultMap id="BaseResultMap" type="com.mashibing.bean.Emp">
+    <id column="id" property="id" />
+    <result column="empno" property="empno" />
+    <result column="ename" property="ename" jdbcType="VARCHAR"/>
+    <result column="job" property="job" />
+    <result column="mgr" property="mgr" />
+    <result column="deptno" property="deptno" />
+    <result column="hiredate" property="hiredate" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, empno, ename, job, mgr, deptno, hiredate
+  </sql>
+
   <!--
     eviction: 缓存回收策略，有这几种回收策略
       LRU - 最近最少回收，移除最长时间不被使用的对象  默认
@@ -16,10 +32,12 @@
     blocking： 若缓存中找不到对应的key，是否会一直blocking，直到有对应的数据进入缓存。
    -->
 
-  <cache eviction="FIFO" flushinterval="60000" size="512" readOnly="true"/>
+  <cache eviction="Lru" flushInterval="60000" size="512" readOnly="true"/>
 
   <select id="findEmpByEmpno" resultType="com.mashibing.bean.Emp" >
-        select * from emp where empno = #{empno}
+        select
+        <include refid="Base_Column_List" />
+        from emp where empno = #{empno}
   </select>
   <select id="findEmpByEmpnoAndEname" resultType="com.mashibing.bean.Emp">
         select * from emp where empno = #{empno} and ename = #{ename}

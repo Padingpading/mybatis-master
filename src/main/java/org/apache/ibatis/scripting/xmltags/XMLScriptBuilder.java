@@ -67,6 +67,7 @@ public class XMLScriptBuilder extends BaseBuilder {
 
   public SqlSource parseScriptNode() {
     // 首先判断当前的节点是不是有动态的SQL，动态SQL会包括占位符或是动态SQL的相关节点
+    //这里获取到完整的sql
     MixedSqlNode rootSqlNode = parseDynamicTags(context);
     SqlSource sqlSource;
     // 根据是否是动态SQL，创建相应的SqlSource对象

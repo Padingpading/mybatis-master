@@ -391,6 +391,10 @@ public class XMLConfigBuilder extends BaseBuilder {
   //	    </dataSource>
   //	  </environment>
   //	</environments>
+  /*1、解析并创建环境id
+  * 2、解析并创建事务管理对象
+  * 3、解析并创建dataSource对象
+  * 4、对上述的内容包装为 Enviroment对象*/
   private void environmentsElement(XNode context) throws Exception {
     if (context != null) {
       // 未指定XMLConfigBuilder.environment字段，则使用default属性

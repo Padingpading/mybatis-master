@@ -84,8 +84,12 @@ public class XMLStatementBuilder extends BaseBuilder {
     String nodeName = context.getNode().getNodeName();
     SqlCommandType sqlCommandType = SqlCommandType.valueOf(nodeName.toUpperCase(Locale.ENGLISH));
     boolean isSelect = sqlCommandType == SqlCommandType.SELECT;
+    //在insert、update、delete语句时： flushCache默认为true，表示任何时候语句被调用，都会导致本地缓存和二级缓存被清空。
+    //在select 默认为false
     boolean flushCache = context.getBooleanAttribute("flushCache", !isSelect);
     //是否要缓存select结果
+    //select默认开启
+    //在insert、update、delete语句时:默认false
     boolean useCache = context.getBooleanAttribute("useCache", isSelect);
     //仅针对嵌套结果 select 语句适用：如果为 true，就是假设包含了嵌套结果集或是分组了，这样的话当返回一个主结果行的时候，就不会发生有对前面结果集的引用的情况。
     //这就使得在获取嵌套的结果集的时候不至于导致内存不够用。默认值：false。
