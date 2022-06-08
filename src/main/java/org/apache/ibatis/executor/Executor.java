@@ -43,7 +43,7 @@ public interface Executor {
   // 执行select类型的SQL语句，返回值分为结果对象列表或游标对象
   <E> List<E> query(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, CacheKey cacheKey, BoundSql boundSql) throws SQLException;
 
-  // 查询，带分页
+  // 查询，带分页,自定义结果映射。
   <E> List<E> query(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler) throws SQLException;
 
   <E> Cursor<E> queryCursor(MappedStatement ms, Object parameter, RowBounds rowBounds) throws SQLException;

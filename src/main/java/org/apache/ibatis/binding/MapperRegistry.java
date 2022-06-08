@@ -27,25 +27,26 @@ import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSession;
 
 /**
- * 映射器注册器
+ * 映射器注册器:构建Configuration创建。
  *
- * @author Clinton Begin
- * @author Eduardo Macarron
- * @author Lasse Voss
+ *
  */
 public class MapperRegistry {
 
   // configuration对象，mybatis全局唯一的配置对象，其中包含了所有配置信息
   private final Configuration config;
   // 记录了Mapper接口与对应MapperProxyFactory之间的关系
+  //在扫描mapper的时候添加
   private final Map<Class<?>, MapperProxyFactory<?>> knownMappers = new HashMap<>();
 
   public MapperRegistry(Configuration config) {
     this.config = config;
   }
 
+  /**
+   * 生成代理对象
+   */
   // 返回代理类
-  @SuppressWarnings("unchecked")
   public <T> T getMapper(Class<T> type, SqlSession sqlSession) {
     // 查找指定type对应MapperProxyFactory对象
     final MapperProxyFactory<T> mapperProxyFactory = (MapperProxyFactory<T>) knownMappers.get(type);

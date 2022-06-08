@@ -4,34 +4,39 @@
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
   <!--加载到XPathParser.Properties属性-->
-  <properties resource="db.properties"></properties>
+  <!--1、加载指定文件 2、加载执行链接,3、配置-->
+  <properties resource="db.properties"> <!--url="baidu"-->
+    <property name="database.driver" value="com.mysql.jdbc.Driver"/>
+    <property name="database.url" value="jdbc:mysql://localhost:3306/chapter4"/>
+    <property name="database.username" value="root"/>
+    <property name="database.password" value="123456"/>
+  </properties>
 
   <!--Configuration中的属性值-->
   <settings>
-    <setting name="logImpl" value="STDOUT_LOGGING"/>
+    <setting name="logImpl" value="LOG4J"/>
     <setting name="mapUnderscoreToCamelCase" value="true"/>
     <!--开启二级缓存-->
     <setting name="cacheEnabled" value="true"/>
-
   </settings>
 
   <!--类型别名 用别名替代 java中的类型-->
   <typeAliases>
-    <!--包扫描-->
-    <!--  <package name="com.mashibing.bean"/>-->
+    <!--包扫描 包下的类,简单类名当做别名 -->
+      <package name="com.mashibing.bean"/>
     <!--自定义-->
-    <typeAlias alias="testEmp" type="com.mashibing.c_alias.Emp"/>
+<!--    <typeAlias alias="testEmp" type="com.mashibing.c_alias.Emp"/>-->
   </typeAliases>
 
   <!--插件扫描-->
-  <!--    <plugins>-->
-  <!--      <plugin interceptor="com.github.pagehelper.PageHelper">-->
-  <!--        <property name="dialect" value="mysql"/>-->
-  <!--      </plugin>-->
-  <!--    </plugins>-->
+      <plugins>
+        <plugin interceptor="com.github.pagehelper.PageHelper">
+          <property name="dialect" value="mysql"/>
+        </plugin>
+      </plugins>
 
-  <!--对象工厂-->
-<!--  <objectFactory type="com.mashibing.e_objectFactory.MyObjectFactory">-->
+<!--  &lt;!&ndash;对象工厂&ndash;&gt;-->
+<!--  <objectFactory type="com.mashibing.e_objectFactory.MyObjectFactory">11-->
 <!--    <property name="email" value="undefined"/>-->
 <!--  </objectFactory>-->
 

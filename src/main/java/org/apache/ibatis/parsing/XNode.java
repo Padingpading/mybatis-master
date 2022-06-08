@@ -34,7 +34,9 @@ import org.w3c.dom.NodeList;
  */
 public class XNode {
 
-  //org.w3c.dom.Node
+  /**
+   * 解析的节点
+   */
   private final Node node;
   // Node节点名称
   private final String name;

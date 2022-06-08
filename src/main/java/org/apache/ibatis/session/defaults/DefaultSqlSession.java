@@ -53,7 +53,6 @@ public class DefaultSqlSession implements SqlSession {
   private final Configuration configuration;
   // 底层依赖的Executor对象
   private final Executor executor;
-
   /**
    * 是否自动提交
    */
@@ -162,10 +161,17 @@ public class DefaultSqlSession implements SqlSession {
     return selectList(statement, parameter, rowBounds, Executor.NO_RESULT_HANDLER);
   }
 
-  //核心selectList
+  /**
+   * @param statement  方法的全限定明
+   * @param parameter  参数绑定
+   * @param rowBounds  分页
+   * @param handler    自定也结果值处理
+   * @return
+   */
   private <E> List<E> selectList(String statement, Object parameter, RowBounds rowBounds, ResultHandler handler) {
     try {
       //根据statement id找到对应的MappedStatement
+      //封装 resultMap、sql
       MappedStatement ms = configuration.getMappedStatement(statement);
       //转而用执行器来查询结果,注意这里传入的ResultHandler是null
       return executor.query(ms, wrapCollection(parameter), rowBounds, handler);

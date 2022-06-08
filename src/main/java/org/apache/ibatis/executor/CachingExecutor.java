@@ -87,9 +87,10 @@ public class CachingExecutor implements Executor {
 
   @Override
   public <E> List<E> query(MappedStatement ms, Object parameterObject, RowBounds rowBounds, ResultHandler resultHandler) throws SQLException {
-    // 获取BoundSql对象
+    // 获取BoundSql:conf、ParameterMapping:sql中参数的映射、paramObject:参数对象、MetaObject:元对象信息 的包装
     BoundSql boundSql = ms.getBoundSql(parameterObject);
-    // 创建CacheKey对象
+    // 创建CacheKey对象,二级缓存mapper级别的缓存。
+    //定位唯一缓存:方法的全限定名字+limit+PageSize+sql占位符)+参数值(若干)+enviromentId
     CacheKey key = createCacheKey(ms, parameterObject, rowBounds, boundSql);
     return query(ms, parameterObject, rowBounds, resultHandler, key, boundSql);
   }
@@ -100,11 +101,11 @@ public class CachingExecutor implements Executor {
       throws SQLException {
     // 获取查询语句所在命名空间对应的二级缓存
     Cache cache = ms.getCache();
-    // 是否开启了二级缓存
+    // 在mapper中开启类缓存,之后在创建MappedStatement的时候会做为他的引用。
     if (cache != null) {
-      // 根据select节点的配置，决定是否需要清空二级缓存
+      // 根据select节点的配置，决定是否需要清空二级缓存,select语句不会清空,update语句会清空
       flushCacheIfRequired(ms);
-      // 检测SQL节点的useCache配置以及是否使用了resultHandler配置
+      // 检测SQL节点的useCache配置(默认为true)以及是否使用了resultHandler配置
       if (ms.isUseCache() && resultHandler == null) {
         // 二级缓存不能保存输出类型的参数，如果查询操作调用了包含输出参数的存储过程，则报错
         ensureNoOutParams(ms, boundSql);

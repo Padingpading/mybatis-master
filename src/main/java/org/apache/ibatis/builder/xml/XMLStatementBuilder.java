@@ -71,7 +71,7 @@ public class XMLStatementBuilder extends BaseBuilder {
     //  SELECT * FROM PERSON WHERE ID = #{id}
     //</select>
   public void parseStatementNode() {
-    // 获取SQL节点的id以及databaseId属性
+    // 获取SQL节点的id以及databaseId属性  selectPerson
     String id = context.getStringAttribute("id");
     String databaseId = context.getStringAttribute("databaseId");
 
@@ -80,7 +80,7 @@ public class XMLStatementBuilder extends BaseBuilder {
       return;
     }
 
-    // 根据SQL节点的名称决定其SqlCommandType
+    // 根据SQL节点的名称决定其SqlCommandType  select
     String nodeName = context.getNode().getNodeName();
     SqlCommandType sqlCommandType = SqlCommandType.valueOf(nodeName.toUpperCase(Locale.ENGLISH));
     boolean isSelect = sqlCommandType == SqlCommandType.SELECT;

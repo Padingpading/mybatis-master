@@ -167,10 +167,7 @@ public interface SqlSession extends Closeable {
    */
   <T> Cursor<T> selectCursor(String statement, Object parameter, RowBounds rowBounds);
 
-  /**
-   * 获取一条记录,并转交给ResultHandler处理。这个方法容许我们自己定义对
-   * 查询到的行的处理方式。不过一般用的并不是很多
-   *
+  /**自定义返回值映射
    * Retrieve a single row mapped from the statement key and parameter
    * using a {@code ResultHandler}.
    * @param statement Unique identifier matching the statement to use.
@@ -189,17 +186,17 @@ public interface SqlSession extends Closeable {
    */
   void select(String statement, ResultHandler handler);
 
-  /**
+  /**分页+自定义返回值映射。
    * Retrieve a single row mapped from the statement key and parameter using a {@code ResultHandler} and
    * {@code RowBounds}.
    *
-   * @param statement
+   * @param statement 方法的全限定名
    *          Unique identifier matching the statement to use.
-   * @param parameter
+   * @param parameter 参数
    *          the parameter
-   * @param rowBounds
+   * @param rowBounds mybatis分页
    *          RowBound instance to limit the query results
-   * @param handler
+   * @param handler 返回值处理器
    *          ResultHandler that will handle each retrieved row
    */
   void select(String statement, Object parameter, RowBounds rowBounds, ResultHandler handler);

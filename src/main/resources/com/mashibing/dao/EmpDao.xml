@@ -19,6 +19,11 @@
     id, empno, ename, job, mgr, deptno, hiredate
   </sql>
 
+
+<!--  <cache-ref namespace="com.mashibing.dao.EmployeesDao"/>-->
+<!--  <cache eviction="Lru" flushInterval="60000" size="512" readOnly="true"/>-->
+
+
   <!--
     eviction: 缓存回收策略，有这几种回收策略
       LRU - 最近最少回收，移除最长时间不被使用的对象  默认
@@ -31,6 +36,8 @@
     type: 指定自定义缓存的全类名(实现Cache 接口即可)
     blocking： 若缓存中找不到对应的key，是否会一直blocking，直到有对应的数据进入缓存。
    -->
+
+
 
   <cache eviction="Lru" flushInterval="60000" size="512" readOnly="true"/>
 

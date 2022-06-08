@@ -58,11 +58,20 @@ public class XMLConfigBuilder extends BaseBuilder {
   // 标识是否已经解析过mybatis-config.xml配置文件
   private boolean parsed;
   // 用于解析mybatis-config.xml配置文件的XPathParser对象
+ //{
+ //    "document":"xml解析成doc",
+ //    "validation":是否解析,
+ //    "entityResolver":"xml格式校验(config.xml和mapper.xml)dtd文件。",
+ //    "xpath":"java解析器"
+ //}
   private final XPathParser parser;
   // 标识<environment>配置的名称
   private String environment;
   // ReflectorFactory负责创建和缓存Reflector对象
   private final ReflectorFactory localReflectorFactory = new DefaultReflectorFactory();
+
+
+  /*====================================================构造器==========================================================*/
 
   public XMLConfigBuilder(Reader reader) {
     this(reader, null, null);
@@ -90,6 +99,8 @@ public class XMLConfigBuilder extends BaseBuilder {
     this(new XPathParser(inputStream, true, props, new XMLMapperEntityResolver()), environment, props);
   }
 
+  /*====================================================构造器==========================================================*/
+
   // 上面的6个构造函数最后都会合流到这个函数，传入XPathParser
   private XMLConfigBuilder(XPathParser parser, String environment, Properties props) {
     // 调用父类初始化configuration
@@ -100,6 +111,7 @@ public class XMLConfigBuilder extends BaseBuilder {
     this.configuration.setVariables(props);
     this.parsed = false;
     this.environment = environment;
+    //xml设置
     this.parser = parser;
   }
 
@@ -118,7 +130,6 @@ public class XMLConfigBuilder extends BaseBuilder {
   // 解析配置
   private void parseConfiguration(XNode root) {
     try {
-      // issue #117 read properties first
       // 解析properties
       propertiesElement(root.evalNode("properties"));
       // 解析settings
@@ -277,7 +288,6 @@ public class XMLConfigBuilder extends BaseBuilder {
 
   private void propertiesElement(XNode context) throws Exception {
     if (context != null) {
-
       // 解析properties的子节点的name和value属性，并记录到Properties中
       Properties defaults = context.getChildrenAsProperties();
       // 解析properties的resource和url属性，这两个属性用于确定properties配置文件的位置
@@ -394,7 +404,8 @@ public class XMLConfigBuilder extends BaseBuilder {
   /*1、解析并创建环境id
   * 2、解析并创建事务管理对象
   * 3、解析并创建dataSource对象
-  * 4、对上述的内容包装为 Enviroment对象*/
+  * 4、对上述的内容包装为 Enviroment对象
+  * */
   private void environmentsElement(XNode context) throws Exception {
     if (context != null) {
       // 未指定XMLConfigBuilder.environment字段，则使用default属性

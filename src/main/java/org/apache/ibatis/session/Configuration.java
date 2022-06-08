@@ -116,12 +116,15 @@ public class Configuration {
   //默认启用缓存
   protected boolean cacheEnabled = true;
   protected boolean callSettersOnNulls;
+  //允许使用方法签名中的名称作为语句参数名称
   protected boolean useActualParamName = true;
   protected boolean returnInstanceForEmptyRow;
   protected boolean shrinkWhitespacesInSql;
 
   protected String logPrefix;
+  //日志
   protected Class<? extends Log> logImpl;
+  //文件读取
   protected Class<? extends VFS> vfsImpl;
   protected Class<?> defaultSqlProviderType;
   protected LocalCacheScope localCacheScope = LocalCacheScope.SESSION;
@@ -135,6 +138,7 @@ public class Configuration {
   protected AutoMappingBehavior autoMappingBehavior = AutoMappingBehavior.PARTIAL;
   protected AutoMappingUnknownColumnBehavior autoMappingUnknownColumnBehavior = AutoMappingUnknownColumnBehavior.NONE;
   //---------以上都是<settings>节点-------
+  //设置环境变量
   protected Properties variables = new Properties();
   //对象工厂和对象包装器工厂
   protected ReflectorFactory reflectorFactory = new DefaultReflectorFactory();
@@ -153,39 +157,46 @@ public class Configuration {
    * @see <a href='https://github.com/mybatis/old-google-code-issues/issues/300'>Issue 300 (google code)</a>
    */
   protected Class<?> configurationFactory;
-
+  //注册的mapper,在解析mapper的时候创建
   protected final MapperRegistry mapperRegistry = new MapperRegistry(this);
   protected final InterceptorChain interceptorChain = new InterceptorChain();
   //类型处理器注册机
   protected final TypeHandlerRegistry typeHandlerRegistry = new TypeHandlerRegistry(this);
-  //类型别名注册机
-  protected final TypeAliasRegistry typeAliasRegistry = new TypeAliasRegistry();
-  protected final LanguageDriverRegistry languageRegistry = new LanguageDriverRegistry();
 
+  //类型别名注册机 Map<String, Class<?>> typeAliases,别名和class的映射.
+  //key:别名
+  //value:class。
+  protected final TypeAliasRegistry typeAliasRegistry = new TypeAliasRegistry();
+
+  protected final LanguageDriverRegistry languageRegistry = new LanguageDriverRegistry();
+  //key:namespaced value:数据库字段和列的映射。
+  protected final Map<String, ResultMap> resultMaps = new StrictMap<>("Result Maps collection");
   //映射的语句,存在Map里
   protected final Map<String, MappedStatement> mappedStatements = new StrictMap<MappedStatement>("Mapped Statements collection")
       .conflictMessageProducer((savedValue, targetValue) ->
           ". please check " + savedValue.getResource() + " and " + targetValue.getResource());
   //缓存,存在Map里
+  //key:namespace
+  //cache
   protected final Map<String, Cache> caches = new StrictMap<>("Caches collection");
-  //结果映射,存在Map里
-  protected final Map<String, ResultMap> resultMaps = new StrictMap<>("Result Maps collection");
+  //resultMap结果映射,存在Map里
   protected final Map<String, ParameterMap> parameterMaps = new StrictMap<>("Parameter Maps collection");
   protected final Map<String, KeyGenerator> keyGenerators = new StrictMap<>("Key Generators collection");
 
+  /**
+   * 已经加载的xml文件,key:类的限定名字。
+   */
   protected final Set<String> loadedResources = new HashSet<>();
   protected final Map<String, XNode> sqlFragments = new StrictMap<>("XML fragments parsed from previous mappers");
 
   //不完整的SQL语句
   protected final Collection<XMLStatementBuilder> incompleteStatements = new LinkedList<>();
+  //未初始化的缓存。
   protected final Collection<CacheRefResolver> incompleteCacheRefs = new LinkedList<>();
   protected final Collection<ResultMapResolver> incompleteResultMaps = new LinkedList<>();
   protected final Collection<MethodResolver> incompleteMethods = new LinkedList<>();
 
-  /*
-   * A map holds cache-ref relationship. The key is the namespace that
-   * references a cache bound to another namespace and the value is the
-   * namespace which the actual cache is bound to.
+  /*cache-ref:做关联查询的时候会缓存key和value做链表查询的结果。
    */
   protected final Map<String, String> cacheRefMap = new HashMap<>();
 
@@ -704,7 +715,7 @@ public class Configuration {
     if (cacheEnabled) {
       executor = new CachingExecutor(executor);
     }
-    // 此处调用插件,通过插件可以改变Executor行为
+    // 此处调用插件,通过插件可以改变Executor行为,生成代理对象。
     executor = (Executor) interceptorChain.pluginAll(executor);
     return executor;
   }

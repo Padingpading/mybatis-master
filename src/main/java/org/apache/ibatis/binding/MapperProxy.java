@@ -32,9 +32,6 @@ import org.apache.ibatis.util.MapUtil;
 
 /**
  * 映射器代理类
- *
- * @author Clinton Begin
- * @author Eduardo Macarron
  */
 public class MapperProxy<T> implements InvocationHandler, Serializable {
 
@@ -86,7 +83,7 @@ public class MapperProxy<T> implements InvocationHandler, Serializable {
   @Override
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
     try {
-      // 如果目标方法继承自Object,则直接调用目标方法
+      // Object的方法执行
       if (Object.class.equals(method.getDeclaringClass())) {
         return method.invoke(this, args);
       } else {

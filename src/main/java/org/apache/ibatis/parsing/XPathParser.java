@@ -53,6 +53,7 @@ public class XPathParser {
   // 是否开启验证
   private boolean validation;
   // 用于加载本地DTD文件
+
   private EntityResolver entityResolver;
   // mybatis-config.xml中properties标签定义的键值对集合
   private Properties variables;
@@ -302,6 +303,7 @@ public class XPathParser {
     this.entityResolver = entityResolver;
     this.variables = variables;
     //共通构造函数，除了把参数都设置到实例变量里面去以外，还初始化了XPath
+    //xml解析
     XPathFactory factory = XPathFactory.newInstance();
     this.xpath = factory.newXPath();
   }

@@ -60,8 +60,9 @@ public class XMLMapperBuilder extends BaseBuilder {
   private final XPathParser parser;
   // 映射器构建助手
   private final MapperBuilderAssistant builderAssistant;
-  // 用来存放sql片段的哈希表
+  // 用来存放sql片段的哈希表   <sql id=""> sql标签
   private final Map<String, XNode> sqlFragments;
+  //加载文件地址。
   private final String resource;
 
   @Deprecated
@@ -139,11 +140,13 @@ public class XMLMapperBuilder extends BaseBuilder {
       cacheElement(context.evalNode("cache"));
       // 解析parameterMap节点
       parameterMapElement(context.evalNodes("/mapper/parameterMap"));
-      // 解析resultMap节点
+      // 解析resultMap节点  Map<String, ResultMap> resultMaps
       resultMapElements(context.evalNodes("/mapper/resultMap"));
-      // 解析sql节点
+      // 解析sql节点 <sql id=""> sql标签
       sqlElement(context.evalNodes("/mapper/sql"));
       // 解析select、update、insert、delete等SQL节点
+      //Map<String, ResultMap> resultMaps   ResultMap:标签解析
+      //Map<String, MappedStatement> mappedStatements:select、update、insert、delete标签解析。
       buildStatementFromContext(context.evalNodes("select|insert|update|delete"));
     } catch (Exception e) {
       throw new BuilderException("Error parsing Mapper XML. The XML location is '" + resource + "'. Cause: " + e, e);
@@ -251,6 +254,7 @@ public class XMLMapperBuilder extends BaseBuilder {
   private void cacheElement(XNode context) {
     if (context != null) {
       // 获取cache节点的type属性，默认是PERPETUAL
+      //指定自定义缓存的全类名(实现Cache 接口即可)
       String type = context.getStringAttribute("type", "PERPETUAL");
       // 查找type属性对应的cache接口实现
       Class<? extends Cache> typeClass = typeAliasRegistry.resolveAlias(type);

@@ -1,7 +1,9 @@
 package com.mashibing.bean;
 
-import java.util.Date;
+import org.apache.ibatis.type.Alias;
 
+import java.util.Date;
+@Alias(value="empa")
 public class Emp {
 
     private Integer empno;

@@ -19,11 +19,15 @@ import org.apache.ibatis.cache.Cache;
 
 /**
  * 缓存引用解析器
+ * cache-ref:做关联查询的时候缓存关联表的数据。
  *
  * @author Clinton Begin
  */
 public class CacheRefResolver {
   private final MapperBuilderAssistant assistant;
+  /**
+   * 关联表的namespace
+   */
   private final String cacheRefNamespace;
 
   public CacheRefResolver(MapperBuilderAssistant assistant, String cacheRefNamespace) {

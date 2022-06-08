@@ -307,8 +307,15 @@ public final class MappedStatement {
     return resultSets;
   }
 
+  /**获取绑定的sql,
+   * parameterObject:请求参数
+   */
   public BoundSql getBoundSql(Object parameterObject) {
-    //其实就是调用sqlSource.getBoundSql
+    //BoundSql:只是对下列做了封装。
+    // conf:配置
+    // ParameterMapping:sql中参数的映射
+    // paramObject:参数对象
+    // MetaObject:元对象信息,objectwarper、objectfactory
     BoundSql boundSql = sqlSource.getBoundSql(parameterObject);
     List<ParameterMapping> parameterMappings = boundSql.getParameterMappings();
     if (parameterMappings == null || parameterMappings.isEmpty()) {

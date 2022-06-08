@@ -80,7 +80,7 @@ public class MapperMethod {
       case SELECT:
         // 处理返回值为void是ResultSet通过ResultHandler处理的方法
         if (method.returnsVoid() && method.hasResultHandler()) {
-          // 如果有结果处理器
+          // 返回结果为空但是有结果处理器
           executeWithResultHandler(sqlSession, args);
           result = null;
           // 处理返回值为集合和数组的方法
@@ -97,6 +97,7 @@ public class MapperMethod {
         } else {
           // 处理返回值为单一对象的方法
           Object param = method.convertArgsToSqlCommandParam(args);
+          //查询一条
           result = sqlSession.selectOne(command.getName(), param);
           if (method.returnsOptional()
               && (result == null || !method.getReturnType().equals(result.getClass()))) {
@@ -150,6 +151,7 @@ public class MapperMethod {
     }
     Object param = method.convertArgsToSqlCommandParam(args);
     if (method.hasRowBounds()) {
+      //mybatis分页分页
       RowBounds rowBounds = method.extractRowBounds(args);
       sqlSession.select(command.getName(), param, rowBounds, method.extractResultHandler(args));
     } else {
@@ -162,16 +164,20 @@ public class MapperMethod {
     List<E> result;
     Object param = method.convertArgsToSqlCommandParam(args);
     if (method.hasRowBounds()) {
+      //有分页
       RowBounds rowBounds = method.extractRowBounds(args);
       result = sqlSession.selectList(command.getName(), param, rowBounds);
     } else {
+      //无分页
       result = sqlSession.selectList(command.getName(), param);
     }
     // issue #510 Collections & arrays support
     if (!method.getReturnType().isAssignableFrom(result.getClass())) {
       if (method.getReturnType().isArray()) {
+        //转为数组
         return convertToArray(result);
       } else {
+        //转为集合
         return convertToDeclaredCollection(sqlSession.getConfiguration(), result);
       }
     }
@@ -216,11 +222,14 @@ public class MapperMethod {
     }
   }
 
+  /**返回值为map
+   */
   private <K, V> Map<K, V> executeForMap(SqlSession sqlSession, Object[] args) {
     Map<K, V> result;
     // 转换实参列表
     Object param = method.convertArgsToSqlCommandParam(args);
     if (method.hasRowBounds()) {
+      //有分页
       RowBounds rowBounds = method.extractRowBounds(args);
       // 通过selectMap完成查询操作
       result = sqlSession.selectMap(command.getName(), param, method.getMapKey(), rowBounds);
@@ -248,9 +257,9 @@ public class MapperMethod {
   // sql命令，静态内部类
   public static class SqlCommand {
 
-    // 初始化name字段
+    // 初始化name字段,类的全限定名.方法名
     private final String name;
-    // 初始化type字段
+    // 初始化type字段  INSERT, UPDATE, DELETE, SELECT,FLUSH
     private final SqlCommandType type;
 
     public SqlCommand(Configuration configuration, Class<?> mapperInterface, Method method) {
@@ -321,7 +330,7 @@ public class MapperMethod {
     // 返回值是否为Cursor类型
     private final boolean returnsCursor;
     private final boolean returnsOptional;
-    // 返回值类型
+    // 执行方法返回值类型
     private final Class<?> returnType;
     // 如果返回值类型是map，则该字段记录了作为key的列名
     private final String mapKey;
@@ -350,8 +359,9 @@ public class MapperMethod {
       // 若MethodSignature对应方法的返回值是Map且制定了@MapKey注解，则使用getMapKey方法处理
       this.mapKey = getMapKey(method);
       this.returnsMap = this.mapKey != null;
-      // 初始化rowBoundsIndex、resultHandlerIndex字段
+      // 初始化RowBounds在方法参数的位置,RowBounds:mybatis的分页
       this.rowBoundsIndex = getUniqueParamIndex(method, RowBounds.class);
+      //ResultHandler在参数的位置ResultHandler自定义结果映射
       this.resultHandlerIndex = getUniqueParamIndex(method, ResultHandler.class);
       // 创建ParamNameResolver对象
       this.paramNameResolver = new ParamNameResolver(configuration, method);
@@ -407,7 +417,7 @@ public class MapperMethod {
     public boolean returnsOptional() {
       return returnsOptional;
     }
-
+    // 记录paramType在方法参数的位置
     private Integer getUniqueParamIndex(Method method, Class<?> paramType) {
       Integer index = null;
       final Class<?>[] argTypes = method.getParameterTypes();

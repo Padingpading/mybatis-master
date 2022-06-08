@@ -28,7 +28,11 @@ import org.apache.ibatis.util.MapUtil;
  */
 public class TransactionalCacheManager {
 
-  // 管理了许多TransactionalCache
+  // 这里创建了一个Map,代表就是一个事务缓存管理器存在多个暂存区
+  // Key为【缓存区】value为【暂存区】
+  // key是从CachingExecutor中传递过来的，从MapperStatement获取的，因为MapperStatement是在Mybatis初始化的时候就已经加载好的
+  // 所以多个线程共用1份
+  // 综合下来就体现了：key为【缓存区】多个线程共用，value为缓存区，为会话私有的
   private final Map<Cache, TransactionalCache> transactionalCaches = new HashMap<>();
 
   public void clear(Cache cache) {

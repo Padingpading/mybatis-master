@@ -37,14 +37,7 @@ public class ParamNameResolver {
 
   private final boolean useActualParamName;
 
-  /**
-   * <p>
-   * The key is the index and the value is the name of the parameter.<br />
-   * The name is obtained from {@link Param} if specified. When {@link Param} is not specified,
-   * the parameter index is used. Note that this index could be different from the actual index
-   * when the method has special parameters (i.e. {@link RowBounds} or {@link ResultHandler}).
-   * </p>
-   * <ul>
+  /**方法参数的映射
    * <li>aMethod(@Param("M") int a, @Param("N") int b) -&gt; {{0, "M"}, {1, "N"}}</li>
    * <li>aMethod(int a, int b) -&gt; {{0, "0"}, {1, "1"}}</li>
    * <li>aMethod(int a, RowBounds rb, int b) -&gt; {{0, "0"}, {2, "1"}}</li>
@@ -53,7 +46,7 @@ public class ParamNameResolver {
   private final SortedMap<Integer, String> names;
 
   private boolean hasParamAnnotation;
-
+  //   是一个工具类，主要用来解析接口方法的参数的，也就是方法参数中参数的位置，名字之间的索引关系，
   public ParamNameResolver(Configuration config, Method method) {
     this.useActualParamName = config.isUseActualParamName();
     // 获取参数列表中每个参数的类型
@@ -134,7 +127,7 @@ public class ParamNameResolver {
    */
   public Object getNamedParams(Object[] args) {
     final int paramCount = names.size();
-    // 五参数，返回null
+    // 无参数，返回null
     if (args == null || paramCount == 0) {
       // 如果没参数
       return null;
@@ -142,11 +135,15 @@ public class ParamNameResolver {
     } else if (!hasParamAnnotation && paramCount == 1) {
       // 如果只有一个参数
       Object value = args[names.firstKey()];
+      //参数标记  单个参数可能是 Map、List、Array、Object
       return wrapToMapIfCollection(value, useActualParamName ? names.get(0) : null);
       // 处理使用@Param注解指定了参数名称或者多个参数的情况
     } else {
       // param这个map记录了参数名称与实参之间的对应关系，ParamMap继承了HashMap，如果向paramMap中添加已经存在的key，会报错，
+      //多参数数据绑定
       final Map<String, Object> param = new ParamMap<>();
+      //1、param1、param2..... value
+      //2、解析出的请求参数字段  字段simplename 或者@param注解。
       int i = 0;
       for (Map.Entry<Integer, String> entry : names.entrySet()) {
         // 将参数名称与实参对应关系记录到param中
@@ -169,7 +166,8 @@ public class ParamNameResolver {
     }
   }
 
-  /**
+  /**封装参数名和参数值,参数标记
+   *
    * Wrap to a {@link ParamMap} if object is {@link Collection} or array.
    *
    * @param object a parameter object
@@ -179,6 +177,7 @@ public class ParamNameResolver {
    * @since 3.5.5
    */
   public static Object wrapToMapIfCollection(Object object, String actualParamName) {
+    //集合
     if (object instanceof Collection) {
       //参数若是Collection型，做collection标记
       ParamMap<Object> map = new ParamMap<>();
